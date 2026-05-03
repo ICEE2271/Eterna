@@ -189,7 +189,7 @@ export default function Graph({ data, onNodeClick, onRefresh }) {
       const cR = 22 * camRef.current.zoom
       const cGrad = ctx.createRadialGradient(center.sx-cR*0.3,center.sy-cR*0.3,0,center.sx,center.sy,cR*2)
       cGrad.addColorStop(0,'rgba(255,255,255,0.95)')
-      cGrad.addColorStop(0.3,'rgba(var(--orb-r,255),var(--orb-g,255),var(--orb-b,255),0.7)')
+      cGrad.addColorStop(0.3,'rgba(255,255,255,0.7)')
       cGrad.addColorStop(0.6,'rgba(255,255,255,0.15)')
       cGrad.addColorStop(1,'rgba(255,255,255,0)')
       ctx.shadowBlur = 30 * camRef.current.zoom
@@ -340,3 +340,4 @@ export default function Graph({ data, onNodeClick, onRefresh }) {
     </div>
   )
 }
+
