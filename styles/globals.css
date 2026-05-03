@@ -1,0 +1,299 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cinzel:wght@400;500&family=JetBrains+Mono:wght@400&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS VARIABLES (all customizable via RGB picker) ─────────────── */
+:root {
+  --bg: #000000;
+  --surface: #0a0a0a;
+  --raised: #141414;
+  --border: rgba(255,255,255,0.08);
+  --border-hover: rgba(255,255,255,0.18);
+  --text: #ffffff;
+  --text-dim: rgba(255,255,255,0.45);
+  --text-muted: rgba(255,255,255,0.25);
+  --accent: #ffffff;
+  --accent-r: 255;
+  --accent-g: 255;
+  --accent-b: 255;
+  --accent-dim: rgba(255,255,255,0.08);
+  --accent-glow: rgba(255,255,255,0.15);
+  --orb-r: 255;
+  --orb-g: 255;
+  --orb-b: 255;
+  --pulse-r: 255;
+  --pulse-g: 255;
+  --pulse-b: 255;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 2px; }
+* { scrollbar-width: thin; scrollbar-color: var(--border-hover) transparent; }
+::selection { background: var(--accent-dim); }
+
+/* ── ETERNA ORB ───────────────────────────────────────────────────── */
+.eterna-orb {
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(var(--orb-r), var(--orb-g), var(--orb-b), 0.95) 0%,
+    rgba(var(--orb-r), var(--orb-g), var(--orb-b), 0.6) 35%,
+    rgba(var(--orb-r), var(--orb-g), var(--orb-b), 0.15) 65%,
+    transparent 100%
+  );
+  border: 1px solid rgba(var(--orb-r), var(--orb-g), var(--orb-b), 0.3);
+  box-shadow:
+    0 0 20px rgba(var(--orb-r), var(--orb-g), var(--orb-b), 0.4),
+    0 0 60px rgba(var(--orb-r), var(--orb-g), var(--orb-b), 0.15),
+    inset 0 0 20px rgba(var(--orb-r), var(--orb-g), var(--orb-b), 0.05);
+  backdrop-filter: blur(8px);
+  animation: orbFloat 6s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Glass sheen on orb */
+.eterna-orb::before {
+  content: '';
+  position: absolute;
+  top: 8%; left: 15%;
+  width: 40%; height: 30%;
+  background: radial-gradient(ellipse, rgba(255,255,255,0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(4px);
+}
+
+.eterna-orb.speaking {
+  animation: orbFloat 6s ease-in-out infinite, orbPulse 0.5s ease-in-out infinite alternate;
+  box-shadow:
+    0 0 30px rgba(var(--orb-r), var(--orb-g), var(--orb-b), 0.7),
+    0 0 80px rgba(var(--orb-r), var(--orb-g), var(--orb-b), 0.3);
+}
+
+.eterna-orb.thinking {
+  animation: orbFloat 6s ease-in-out infinite, orbThink 2s ease-in-out infinite;
+}
+
+@keyframes orbFloat {
+  0%,100% { border-radius: 60% 40% 30% 70%/60% 30% 70% 40%; }
+  20% { border-radius: 30% 60% 70% 40%/50% 60% 30% 60%; }
+  40% { border-radius: 50% 60% 30% 70%/40% 60% 70% 30%; }
+  60% { border-radius: 70% 30% 60% 40%/30% 70% 40% 60%; }
+  80% { border-radius: 40% 60% 50% 50%/60% 40% 60% 40%; }
+}
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.06); }
+}
+@keyframes orbThink {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.95); }
+}
+
+/* ── THINKING DOTS ───────────────────────────────────────────────── */
+.dot-pulse span {
+  display: inline-block;
+  width: 4px; height: 4px;
+  background: var(--text-dim);
+  border-radius: 50%;
+  animation: dotAnim 1.2s ease-in-out infinite;
+}
+.dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
+.dot-pulse span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dotAnim {
+  0%,80%,100% { transform: scale(0.6); opacity: 0.3; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* ── PANELS ──────────────────────────────────────────────────────── */
+.panel { background: var(--surface); border-right: 1px solid var(--border); }
+.panel-raised { background: var(--raised); }
+
+/* ── INPUTS ──────────────────────────────────────────────────────── */
+.e-input {
+  background: var(--raised);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+.e-input:focus { border-color: var(--border-hover); }
+.e-input::placeholder { color: var(--text-muted); }
+
+/* ── BUTTONS ─────────────────────────────────────────────────────── */
+.e-btn {
+  background: var(--raised);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.e-btn:hover { border-color: var(--border-hover); background: rgba(255,255,255,0.05); }
+
+.e-btn-accent {
+  background: var(--accent-dim);
+  border: 1px solid rgba(var(--accent-r),var(--accent-g),var(--accent-b),0.3);
+  color: var(--accent);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.e-btn-accent:hover {
+  background: rgba(var(--accent-r),var(--accent-g),var(--accent-b),0.15);
+  box-shadow: 0 0 12px rgba(var(--accent-r),var(--accent-g),var(--accent-b),0.2);
+}
+
+/* ── TREE ────────────────────────────────────────────────────────── */
+.tree-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12.5px;
+  color: var(--text-dim);
+  transition: all 0.12s;
+  user-select: none;
+  position: relative;
+}
+.tree-row:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+.tree-row.active { background: var(--accent-dim); color: var(--accent); }
+.tree-chevron { font-size: 8px; transition: transform 0.15s; flex-shrink: 0; width: 10px; }
+.tree-chevron.open { transform: rotate(90deg); }
+.tree-icon { font-size: 11px; flex-shrink: 0; opacity: 0.6; }
+.tree-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tree-actions { display: none; gap: 2px; }
+.tree-row:hover .tree-actions { display: flex; }
+.tree-action-btn {
+  width: 18px; height: 18px;
+  border: none; background: transparent;
+  color: var(--text-dim); cursor: pointer;
+  border-radius: 3px; font-size: 10px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.1s;
+}
+.tree-action-btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+
+/* ── MESSAGES ────────────────────────────────────────────────────── */
+.msg-in { animation: msgIn 0.2s ease-out; }
+@keyframes msgIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── MARKDOWN ────────────────────────────────────────────────────── */
+.md h1,.md h2,.md h3 { font-family: 'Cinzel',serif; color: var(--accent); margin: 1em 0 0.4em; }
+.md h1 { font-size: 1.4em; }
+.md h2 { font-size: 1.2em; }
+.md h3 { font-size: 1.05em; }
+.md p { margin-bottom: 0.7em; }
+.md strong { color: var(--text); font-weight: 600; }
+.md em { font-style: italic; opacity: 0.85; }
+.md code { background: var(--raised); border: 1px solid var(--border); padding: 1px 5px; border-radius: 3px; font-family: 'JetBrains Mono',monospace; font-size: 0.82em; }
+.md pre { background: var(--raised); border: 1px solid var(--border); padding: 12px; border-radius: 6px; overflow-x: auto; margin-bottom: 0.8em; }
+.md pre code { border: none; background: none; padding: 0; }
+.md blockquote { border-left: 2px solid var(--border-hover); padding-left: 12px; color: var(--text-dim); margin-bottom: 0.8em; }
+.md ul,.md ol { padding-left: 1.5em; margin-bottom: 0.8em; }
+.md li { margin-bottom: 0.25em; }
+.md hr { border: none; border-top: 1px solid var(--border); margin: 1em 0; }
+.md a.wiki { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.md a.wiki.broken { color: var(--text-muted); text-decoration: line-through; }
+.md table { width: 100%; border-collapse: collapse; margin-bottom: 0.8em; }
+.md th,.md td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; }
+.md th { background: var(--raised); font-weight: 600; }
+
+/* ── CONTEXT MENU ─────────────────────────────────────────────────── */
+.ctx-menu {
+  position: fixed;
+  background: var(--raised);
+  border: 1px solid var(--border-hover);
+  border-radius: 8px;
+  padding: 4px;
+  z-index: 1000;
+  min-width: 160px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+.ctx-item {
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text-dim);
+  transition: all 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ctx-item:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+.ctx-item.danger:hover { background: rgba(220,50,50,0.1); color: #ff6060; }
+.ctx-divider { height: 1px; background: var(--border); margin: 4px 0; }
+
+/* ── MODAL ────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+  z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border-hover);
+  border-radius: 12px;
+  padding: 24px;
+  min-width: 320px;
+  max-width: 480px;
+  width: 90%;
+}
+
+/* ── TABS ─────────────────────────────────────────────────────────── */
+.tab {
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text-dim);
+  transition: all 0.15s;
+  border: 1px solid transparent;
+}
+.tab:hover { color: var(--text); }
+.tab.active { background: var(--accent-dim); color: var(--accent); border-color: rgba(var(--accent-r),var(--accent-g),var(--accent-b),0.2); }
+
+/* ── FLASH ────────────────────────────────────────────────────────── */
+.flash { animation: flashAnim 1.2s ease-out; }
+@keyframes flashAnim { 0% { background: rgba(255,255,255,0.06); } 100% { background: transparent; } }
+
+/* ── RESIZE HANDLE ────────────────────────────────────────────────── */
+.resize-handle {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 4px;
+  cursor: col-resize;
+  background: transparent;
+  transition: background 0.15s;
+  z-index: 10;
+}
+.resize-handle:hover, .resize-handle.dragging { background: rgba(255,255,255,0.15); }
